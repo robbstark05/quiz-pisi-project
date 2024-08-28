@@ -57,7 +57,7 @@ class CinemaQuiz(App):
 
     def adicionar_botões(self):
         for opcao in self.questoes[self.index]["opcoes"]:
-            btn = Button(text=opcao, on_press=self.conferir_resposta()
+            btn = Button(text=opcao, on_press=self.conferir_resposta())
             self.listabotoes.append(btn)
             self.layout.add_widget(btn)
 
