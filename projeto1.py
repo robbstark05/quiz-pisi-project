@@ -6,7 +6,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.image import Image
 from kivy.graphics import Color, Rectangle
 
-class AnimeQuiz(App):
+class CinemaQuiz(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -15,33 +15,33 @@ class AnimeQuiz(App):
         self.score = 0
 
         self.questions = [
-            {"question": "Saudações aos visitantes de Westeros! \nDescobriremos se você é realmente um fã de Game of Thrones :)", "options": ["DRACARYS"], "correct": "DRACARYS"},
-            {"question": "Qual é a casa mais antiga de Westeros?", "options": ["Casa Lannister", "Casa Targaryen", "Casa Stark", "Casa Velaryon"], "correct": "Casa Targaryen"},
-            {"question": "Quantas vezes a familia Stark aparece junta na série t", "options": ["Tóquio", "Nova York", "Londres"], "correct": "Tóquio"},
-            {"question": "Qual o nome do renomado rei dos piratas em One Piece?", "options": ["Luffy", "Shanks", "Roger"], "correct": "Roger"},
-            {"question": "Em Hunter x Hunter, qual o sobrenome da família do personagem Killua?", "options": ["Zoldick", "Silva", "D."], "correct": "Zoldick"},
-            {"question": "Qual é o título em inglês do anime japonês conhecido como Shingeki no Kyojin?", "options": ["Fullmetal Alchemist", "Attack on Titan", "My Hero Academia"], "correct": "Attack on Titan"},
-            {"question": "Quais são os números escritos nos bottons de Gon e Killua (respectivamente) no Exame Hunter?", "options": ["(105/87)", "(905/49)", "(405/99)"], "correct": "(405/99)"},
-            {"question": "Qual o maior medo do Goku?", "options": ["Perder a Chichi (esposa)", "Agulha", "Bills (Deus da Destruição)"], "correct": "Agulha"}
+            {"question": "Oi, cinéfilo! \nDescobriremos se você é realmente fã de cinema e outros filmes :)", "options": ["INICIAR"], "correct": "INICIAR"},
+            {"question": "Quando foi criado um dos primeiros filmes da história?", "options": ["1877", "1888", "1898","1903"], "correct": "1888", "justification": "O título da obra considerada um dos primeiros filmes da história do cinema é Roundhay Garden Scene. \nTrata-se de um curta-metragem realizado no Reino Unido no ano de 1888. A produção tem apenas dois segundos de duração e a autoria é do inventor francês Louis Le Prince. ", "image":"rdw.jpg"},
+            {"question": "Quantas pessoas já negaram receber o Oscar?", "options": ["0", "2", "3", "5"], "correct": "3"},
+            {"question": "Qual o filme mais bem avaliado do Quentin Tarantino?", "options": ["Cães de Aluguel", "Pulp Fiction", "Kill Bill", "Django Livre"], "correct": "Cães de Aluguel"},
+            {"question": "Qual a cena eleita a mais tocante de todos os filmes já feitos?", "options": ["Morte da mãe do Bambi", "E.T. se despedindo do menino Elliot", "Morte do Mufasa em Rei Leão", "Cena da moeda e conversa entre Molly e seu falecido marido Sam em Ghost"], "correct": "E.T. se despedindo do menino Elliot"},
+            {"question": "Qual a única atriz brasileira foi indicada ao Oscar?", "options": ["Juliana Paes", "Suzana Vieira", "Fernanda Montenegro", "Jade Picon"], "correct": "Fernanda Montenegro"},
+            {"question": "Qual é a maior bilheteria da história?", "options": ["Vingadores: Ultimato", "Avatar", "Titanic", "Star Wars: O Despertar da Força"], "correct": "Avatar"},
+            {"question": "Qual a maior bilheteria de 2024?", "options": ["Deadpool & Wolverine", "Duna: Parte 2", "Divertida Mente 2", "Meu Malvado Favorito 4"], "correct": "Divertida Mente 2"}
         ]
         self.layout = BoxLayout(orientation='vertical')
 
-        # Adicionando a cor de fundo vermelha
+        # Adicionando a cor de fundo amarela
         with self.layout.canvas.before:
-            Color(255, 255, 0, 1)  # Vermelho, RGBA
+            Color(237, 227, 0, 1)  # Amarelo, RGBA
             self.rect = Rectangle(size=self.layout.size, pos=self.layout.pos)
 
         self.layout.bind(size=self._update_rect, pos=self._update_rect)
 
-        self.image = Image(source='got.png')
+        # Adicionando imagem icon
+        self.image = Image(source='icon.png')
         self.layout.add_widget(self.image)
-
 
         self.question_label = Label(text=self.questions[self.index]["question"], color=(0,0,0,1))
         self.layout.add_widget(self.question_label)
 
         self.listabotoes = []
-        self.add_buttons()
+        self.adicionar_botões()
 
         return self.layout
 
@@ -49,16 +49,33 @@ class AnimeQuiz(App):
         self.rect.pos = instance.pos
         self.rect.size = instance.size
 
-    def add_buttons(self):
+    def adicionar_botões(self):
         for option in self.questions[self.index]["options"]:
             btn = Button(text=option, on_press=self.check_answer)
             self.listabotoes.append(btn)
             self.layout.add_widget(btn)
 
     def check_answer(self, instance):
-        if instance.text == self.questions[self.index]["correct"]:
-            self.score += 1
+        if self.index==0:
+            self.next_question()
+            return
 
+        elif instance.text == self.questions[self.index]["correct"]:
+            self.score += 1
+            result = "Correto!"
+        else:
+            result = f"Errado! A resposta correta era: {self.questions[self.index]['correct']}"
+
+        # Mostra um popup com o resultado e avança para a próxima pergunta
+        result_popup = Popup(
+            title='Resultado',
+            content=Label(text=result),
+            size_hint=(None, None), size=(400, 200),
+            on_dismiss=self.next_question
+        )
+        result_popup.open()
+
+    def next_question(self, *args):
         self.index += 1
 
         if self.index < len(self.questions):
@@ -73,19 +90,19 @@ class AnimeQuiz(App):
             self.layout.remove_widget(btn)
         self.listabotoes.clear()
 
-        self.add_buttons()
+        self.adicionar_botões()
 
     def show_score(self):
         # Cria a mensagem inicial com a pontuação
-        score_message = f'Sua pontuação: {self.score}/{len(self.questions)}\n\n'
+        score_message = f'Sua pontuação: {self.score}/{(len(self.questions)-1)}\n\n'
 
         # Adiciona a mensagem dependendo da pontuação
         if self.score <= 3:
-            message = 'Poderia ser melhor, talvez você seja um bastardo!'
+            message = 'Você não é um fã de cinema, sinto muito!'
         elif 4 <= self.score < 6:
-            message = 'Você poderia comandar uma casa de Westeros com todo esse conhecimento!'
+            message = 'Você está no caminho para ser um fã de cinema!'
         else:
-            message = 'Você estaria sentado no Trono de Ferro com todo este poder!'
+            message = 'Você definitivamente é um fã de cinema!'
 
         # Combina a mensagem de pontuação com a mensagem condicional
         full_message = score_message + message
@@ -100,4 +117,4 @@ class AnimeQuiz(App):
         score_popup.open()
 
 if __name__ == '__main__':
-    AnimeQuiz().run()
+    CinemaQuiz().run()
