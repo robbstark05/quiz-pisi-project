@@ -17,20 +17,21 @@ class CinemaQuiz(App):
 
         self.primeiraquestao = [{"questao": "Oi, cinéfilo! \nDescobriremos se você é realmente fã de cinema e outros filmes :)", "opcoes": ["INICIAR"], "correta": "INICIAR"}]
         outrasquestoes = [
-            {"questao": "Quando foi criado um dos primeiros filmes da história?", "opcoes": ["1877", "1888", "1898","1903"], "correta": "1888"},
+            {"questao": "Quando foi criado um dos primeiros filmes da história?", "opcoes": ["1877", "1888", "1898", "1903"], "correta": "1888"},
             {"questao": "Quantas pessoas já negaram receber o Oscar?", "opcoes": ["0", "2", "3", "5"], "correta": "3"},
             {"questao": "Qual o filme mais bem avaliado do Quentin Tarantino?", "opcoes": ["Cães de Aluguel", "Pulp Fiction", "Kill Bill", "Django Livre"], "correta": "Cães de Aluguel"},
             {"questao": "Qual a cena eleita a mais tocante de todos os filmes já feitos?", "opcoes": ["Morte da mãe do Bambi", "E.T. se despedindo do menino Elliot", "Morte do Mufasa em Rei Leão", "Cena da moeda e conversa entre Molly e seu falecido marido Sam em Ghost"], "correta": "E.T. se despedindo do menino Elliot"},
             {"questao": "Qual a única atriz brasileira foi indicada ao Oscar?", "opcoes": ["Juliana Paes", "Suzana Vieira", "Fernanda Montenegro", "Jade Picon"], "correta": "Fernanda Montenegro"},
-            {"questao": "Qual é a maior bilheteria da história?", "opcoes": ["Vingadores: Ultimato", "Avatar", "Titanic", "Star Wars: O Despertar da Força"], "correta": "Avatar"},
-            {"questao": "Qual a maior bilheteria de 2024?", "opcoes": ["Deadpool & Wolverine", "Duna: Parte 2", "Divertida Mente 2", "Meu Malvado Favorito 4"], "correta": "Divertida Mente 2"}
+            {"questao": "Qual é a maior bilheteira da história?", "opcoes": ["Vingadores: Ultimato", "Avatar", "Titanic", "Star Wars: O Despertar da Força"], "correta": "Avatar"},
+            {"questao": "Qual a maior bilheteira de 2024?", "opcoes": ["Deadpool & Wolverine", "Duna: Parte 2", "Divertida Mente 2", "Meu Malvado Favorito 4"], "correta": "Divertida Mente 2"},
+            {"questao": "Em qual filme a famosa frase \"Eu sou o rei do mundo!\" foi dita?", "opcoes": ["Titanic", "O Grande Gatsby", "King Kong", "Gladiador"], "correta": "Titanic"},
+            {"questao": "Quem foi o criador do estúdio de animação Pixar?", "opcoes": ["Walt Disney", "John Lasseter", "Steve Jobs", "George Lucas"], "correta": "Steve Jobs"},
+            {"questao": "Qual filme detém o recorde de maior orçamento já gasto em sua produção?", "opcoes": ["Avatar", "Piratas do Caribe: Navegando em Águas Misteriosas", "Vingadores: Ultimato", "Liga da Justiça"], "correta": "Pirates of the Caribbean: On Stranger Tides"}
         ]
         shuffle(outrasquestoes)
-        self.questoes= self.primeiraquestao + outrasquestoes
+        self.questoes = self.primeiraquestao + outrasquestoes
 
         self.layout = BoxLayout(orientation='vertical')
-
-
 
         # Adicionando a cor de fundo amarela
         with self.layout.canvas.before:
@@ -62,7 +63,7 @@ class CinemaQuiz(App):
             self.layout.add_widget(btn)
 
     def conferir_resposta(self, instance):
-        if self.index==0:
+        if self.index == 0:
             self.proxima_questao()
             return
 
@@ -100,12 +101,12 @@ class CinemaQuiz(App):
 
     def mostrar_pontuacao(self):
         # Cria a mensagem inicial com a pontuação
-        score_message = f'Sua pontuação: {self.pontuacao}/{(len(self.questoes)-1)}\n\n'
+        score_message = f'Sua pontuação: {self.pontucao}/{(len(self.questoes) - 1)}\n\n'
 
         # Adiciona a mensagem dependendo da pontuação
-        if self.pontuacao <= 3:
+        if self.pontucao <= 3:
             message = 'Você não é um fã de cinema, sinto muito!'
-        elif 4 <= self.pontuacao < 6:
+        elif 4 <= self.pontucao < 6:
             message = 'Você está no caminho para ser um fã de cinema!'
         else:
             message = 'Você definitivamente é um fã de cinema!'
@@ -124,3 +125,4 @@ class CinemaQuiz(App):
 
 if __name__ == '__main__':
     CinemaQuiz().run()
+
